@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import org.jsoup.nodes.Document;
@@ -66,10 +67,20 @@ public class DataHandlerTest {
 
 		DataHandler handler = new DataHandler("./test_data2.txt");
 		handler.setEdgeList(TEST_LIST_1);
-		handler.writeToFile();
+		try {
+			handler.writeToFile();
+		} catch (NoDataException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		ArrayList<String[]> emptyList = new ArrayList<String[]>();
 		handler.setEdgeList(emptyList);
-		handler.readFromFile();
+		try {
+			handler.readFromFile();
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		ArrayList<String[]> OUTPUT_LIST = handler.getEdgeList();
 		
 		try{
@@ -98,10 +109,20 @@ public class DataHandlerTest {
 
 		DataHandler handler = new DataHandler("test_data.txt");
 		handler.setEdgeList(TEST_LIST_1);
-		handler.writeToFile();
+		try {
+			handler.writeToFile();
+		} catch (NoDataException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		ArrayList<String[]> emptyList = new ArrayList<String[]>();
 		handler.setEdgeList(emptyList);
-		handler.readFromFile();
+		try {
+			handler.readFromFile();
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		ArrayList<String[]> OUTPUT_LIST = handler.getEdgeList();
 		
 		try{

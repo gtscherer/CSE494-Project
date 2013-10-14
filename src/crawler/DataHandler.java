@@ -9,17 +9,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class DataHandler {	
-	private ArrayList<String[]> edges = null;
+	private ArrayList<String[]> edges = null, enumeratedEdgeList = null;
 	private String filePath = null;
 	
 	public DataHandler() {
 		this.edges = new ArrayList<String[]>();
+		this.filePath = "output.txt";
 	}
 	public DataHandler(String path){
 		this.edges = new ArrayList<String[]>();
 		this.filePath = path;
 	}
-	
+	public void setEnumeratedList(ArrayList<String[]> edges){
+		this.enumeratedEdgeList = edges;
+	}
 	public void setFilePath(String path){
 		this.filePath = path;
 	}
@@ -37,7 +40,7 @@ public class DataHandler {
 	}
 	
 	
-	protected String dataOutputAggregator() throws NoDataException{
+	protected String dataOutputAggregator(ArrayList<String[]> edges) throws NoDataException{
 		final int PARENT = 0;
 		final int CHILD = 1;
 		if(edges == null || edges.size() < 1){
@@ -83,7 +86,7 @@ public class DataHandler {
 		}
 	}
 	
-	public void readFromFile(){
+	public void readFromFile() throws FileNotFoundException{
 		try {
 			FileReader fileReader;
 			if(this.filePath == null){
@@ -104,6 +107,7 @@ public class DataHandler {
 		catch (FileNotFoundException e) {
 			System.err.println("File not found on path: " + this.filePath);
 			e.printStackTrace();
+			throw e;
 		} 
 		catch (IOException e) {
 			e.printStackTrace();
@@ -115,27 +119,32 @@ public class DataHandler {
 		
 	}
 	
-	public void writeToFile(){
+	public void writeToFile() throws NoDataException{
 		try {
-			FileWriter fileWriter;
+			FileWriter fileWriter1, fileWriter2;
 			if(this.filePath == null){
-				fileWriter = new FileWriter("data.txt");
+				fileWriter1 = new FileWriter("data.txt");
+				fileWriter2 = new FileWriter("enum_data.txt");
 			}
 			else{
-				fileWriter = new FileWriter(this.filePath);
+				fileWriter1 = new FileWriter(this.filePath);
+				fileWriter2 = new FileWriter("enum_" + this.filePath);
 			}
-			BufferedWriter outBuffer = new BufferedWriter(fileWriter);
-			outBuffer.write(this.dataOutputAggregator());
+			BufferedWriter outBuffer = new BufferedWriter(fileWriter1);
+			outBuffer.write(this.dataOutputAggregator(this.edges));
 			outBuffer.close();
-			fileWriter.close();
+			fileWriter1.close();
+			outBuffer = new BufferedWriter(fileWriter2);
+			outBuffer.write(this.dataOutputAggregator(this.enumeratedEdgeList));
+			outBuffer.close();
+			fileWriter2.close();
 		} 
 		catch (IOException e) {
 			System.err.println("Failed to write file...");
 			e.printStackTrace();
 		}
 		catch(NoDataException e){
-			System.err.println(e.getMessage());
-			e.printStackTrace();
+			throw e;
 		}
 	}
 	
@@ -150,6 +159,24 @@ public class DataHandler {
 			}
 		}
 		return found;
+	}
+	public int searchEdgeUndirected(String[] edgeToCheck){
+		int index = -1;
+		for(int i = 0; i < this.edges.size(); ++i){
+			if(this.edges.get(i)[0].equals(edgeToCheck[0])){
+				if(this.edges.get(i)[1].equals(edgeToCheck[1])){
+					index = i;
+					return index;
+				}
+			}
+			else if(this.edges.get(i)[1].equals(edgeToCheck[0])){
+				if(this.edges.get(i)[0].equals(edgeToCheck[1])){
+					index = i;
+					return index;
+				}
+			}
+		}
+		return index;
 	}
 	protected int searchEdge(String[] edgeToFind){
 		int index = -1;

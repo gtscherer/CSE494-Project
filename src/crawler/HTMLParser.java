@@ -12,6 +12,7 @@ public class HTMLParser {
 	public HTMLParser(Document html) {
 		this.html = html;
 	}
+	public HTMLParser(){};
 	public HTMLParser(Document html, String parent){
 		this.html = html;
 		this.parent = parent;
@@ -22,6 +23,9 @@ public class HTMLParser {
 	}
 	public void setHtml(Document html){
 		this.html = html;
+	}
+	public void setParent(String parent){
+		this.parent = parent;
 	}
 	
 	public ArrayList<String> getFriends() throws NoDataException{
