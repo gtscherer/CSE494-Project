@@ -11,20 +11,19 @@ public class Crawler {
 	public static void resume(DataHandler handler, String name) throws NoDataException, InterruptedException{
 		System.out.println("Starting crawl with " + name);	
 		BFS crawler = new BFS(name, handler);
+		boolean firstRun = true;
 		do{
 			ArrayList<String[]> edges = crawler.findEdges();
-			if(edges == null){
-				break;
-			}
+//			if(edges != null){
+//				continue;
+//			}
 			System.out.println("Found " + edges.size() + " friends of " + name);
-			for(String[] edge : edges){
-				handler.addEdge(edge[0], edge[1]);
-			}
+			for(String[] edge : edges) handler.addEdge(edge[0], edge[1]);
 			name = crawler.peekNextChild();
 			crawler.setCurrentParent(name);
 			//System.out.println(handler.toString());
 
-			if(crawler.getNodeCount() > 6000){
+			if((!(crawler.getQueueSize() > 0) || crawler.getNodeCount() > 100000) && !firstRun){
 				handler.setEnumeratedList(crawler.getEnumeratedList());
 				break;
 			}
@@ -32,7 +31,7 @@ public class Crawler {
 			System.out.println();
 
 			System.out.println(name);
-
+			if(firstRun) firstRun = false;
 			
 		}
 		while(crawler.peekNextChild() != null);

@@ -12,11 +12,19 @@ public class BFS {
 	private String currentParent;
 	private DataHandler handler;
 	private int nodeCount = 0;
+	private int SAMPLE_SIZE = 2000;
 	private ArrayList<String[]> enumeratedList = new ArrayList<String[]>();
 	public BFS(String parent, DataHandler handler) {
 		this.parents = new LinkedList<String>();
 		this.currentParent = parent;
 		this.handler = handler;
+	}
+	public int getQueueSize(){
+		System.out.println(this.parents.size());
+		return this.parents.size();
+	}
+	public void setSampleSize(int size){
+		this.SAMPLE_SIZE = size;
 	}
 	public ArrayList<String[]> getEnumeratedList(){
 		return this.enumeratedList;
@@ -52,12 +60,12 @@ public class BFS {
 			shuffled.add(friends.get(index));
 			friends.remove(index);
 		}
+		if(shuffled.size() > SAMPLE_SIZE) for(int i = shuffled.size(); i < SAMPLE_SIZE && i < shuffled.size(); ++i) shuffled.remove(i); 
 		return shuffled;
 	}
 	public ArrayList<String[]> findEdges(){
 		String node = this.currentParent;
 		URLHandler handler = new URLHandler("http://www.last.fm");
-		// TODO: Needs to handle multiple pages
 		String subDomain;
 		HTMLParser parser = new HTMLParser();
 		ArrayList<String[]> edgeList = new ArrayList<String[]>();
@@ -67,6 +75,8 @@ public class BFS {
 			subDomain = "/user/" + node + "/friends/?page=" + pageCounter;
 			Document html = handler.getHtml(subDomain);
 			System.out.println(subDomain);
+			if(html == null && pageCounter == 1) return null;
+			else if(html == null) return edgeList;
 			parser.setHtml(html);
 			try {
 				ArrayList<String> friends = parser.getFriends();
