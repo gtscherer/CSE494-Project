@@ -38,6 +38,7 @@ else:
 				comma = 1
 		parsedDataset += [[ first , second ]]
 	anonymizedSet = []
+	iterations = 0
 	for datum in parsedDataset:
 		#print datum
 		foundFirst = 0
@@ -55,7 +56,17 @@ else:
 			if foundFirst > 0 and foundSecond > 0:
 				#print first + ' , ' + second
 				break
+		iterations += 1
+		sys.stdout.write('Progress: ' + str(100 * float(iterations) / float(len(parsedDataset))) + '%         ')
+		sys.stdout.flush()
+		sys.stdout.flush()
+		sys.stdout.write('\r')
 		anonymizedSet += [[first, second]]
-	for line in anonymizedSet:
+	for i, line in enumerate(anonymizedSet):
 		#print line
+		sys.stdout.write('Writing Progress: ' + str(100 * float(i) / float(len(anonymizedSet))) + '%           ')
+		sys.stdout.flush()
+		sys.stdout.flush()
+		sys.stdout.write('\r')
+		anonymizedSet += [[first, second]]
 		output.write(line[0] + ',' + line[1] + '\n')

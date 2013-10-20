@@ -11,13 +11,16 @@ public class BFS {
 	private LinkedList<String> parents;
 	private String currentParent;
 	private DataHandler handler;
-	private int nodeCount = 0;
+	private int nodeCount = 1;
 	private int SAMPLE_SIZE = 2000;
 	private ArrayList<String[]> enumeratedList = new ArrayList<String[]>();
 	public BFS(String parent, DataHandler handler) {
 		this.parents = new LinkedList<String>();
 		this.currentParent = parent;
 		this.handler = handler;
+		String[] firstEdge = { "1" , parent };
+		this.enumeratedList.add(firstEdge);
+		++this.nodeCount;
 	}
 	public int getQueueSize(){
 		System.out.println(this.parents.size());
@@ -95,7 +98,7 @@ public class BFS {
 						}
 					}
 					if(howManyEqual == firstPage.size()){
-						this.setCurrentParent(this.getNextChild());
+						//this.setCurrentParent(this.getNextChild());
 						ArrayList<String[]> shuffled = shuffle(edgeList);
 						for(String[] edge : shuffled) {
 							this.addNewChild(edge[1]);
@@ -130,7 +133,7 @@ public class BFS {
 					}
 					++pageCounter;
 					try {
-						Thread.sleep(3000);
+						Thread.sleep(2000);
 					} 
 					catch (InterruptedException e) {
 						// TODO Auto-generated catch block

@@ -21,15 +21,15 @@ public class Crawler {
 			else{
 				System.out.println("Edges are null");
 			}
-			name = crawler.peekNextChild();
+			name = crawler.getNextChild();
 			crawler.setCurrentParent(name);
 			//System.out.println(handler.toString());
 
-			if((!(crawler.getQueueSize() > 0) /*|| crawler.getNodeCount() > 100000*/) && !firstRun){
+			if((!(crawler.getQueueSize() > 0) /*|| crawler.getNodeCount() > 100*/) && !firstRun){
 				handler.setEnumeratedList(crawler.getEnumeratedList());
 				break;
 			}
-			Thread.sleep(3000);
+			Thread.sleep(2000);
 			System.out.println();
 
 			System.out.println(name);
