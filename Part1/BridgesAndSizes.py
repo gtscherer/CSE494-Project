@@ -1,5 +1,8 @@
 from queue import Queue
 from random import choice
+import DegreeDistribution
+import GraphFactory
+import networkx as nx
 
 def bfs(item1, item2, edgeList):
 	q = Queue(maxsize=0)
@@ -25,6 +28,7 @@ def edgeRemover(edge, edgeList):
 
 class PercentageSizeRemover:
 	edgeList = []
+	gf = GraphFactory()
 	def getPercentage(self, percent):
 		num = int(float(percent / 100) * float(len(edgeList)))
 		removeList = []
@@ -36,7 +40,28 @@ class PercentageSizeRemover:
 		for edge in removeList:
 			augmentedList = edgeRemover(edge, augmentedList)
 		return augmentedList
-	def __init__(self, edgeList):
+	def xRunner(self):
+		plotList = []
+		for x in xrange(1, 100):
+			augmentedList = self.removeEdges(self.getPercentage(x))
+			gf.setDataSet(augmentedList)
+			componentList = nx.connected_component_subgraphs(gf.getGraph())
+			largest = 0
+			for graph in componentList:
+				size = len(graph.nodes())
+				if size > largest:
+					largest = size
+			plotlist += [(x, largest)]
+			sys.stdout.write('Finding Largest Components: ' + str(float(x) / float(100)) + '%         ')
+			sys.stdout.flush()
+			sys.stdout.flush()
+			sys.stdout.write('\r')
+		distPlotter = DegreeDistribution()
+		distPlotter.setDegreeDistribution(plotList)
+		distPlotter.plotDegreeDistribution("x% \Plot", "x%", "Largest Connected Component")
+	def __init__(self, edgeList, graphFactory=None):
+		if graphFactory != None:
+			self.gf = graphFactory
 		self.edgeList = edgeList
 
 class BridgeFinder:
