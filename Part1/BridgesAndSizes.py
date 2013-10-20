@@ -26,9 +26,9 @@ def edgeRemover(edge, edgeList):
 class PercentageSizeRemover:
 	edgeList = []
 	def getPercentage(self, percent):
-		num = int(percent / len(edgeList))
+		num = int(float(percent / 100) * float(len(edgeList)))
 		removeList = []
-		for i in xrange(len(self.edgeList):
+		for i in xrange(len(self.edgeList)):
 			removeList += [choice(self.edgeList)]
 		return removeList
 	def removeEdges(self, removeList):
