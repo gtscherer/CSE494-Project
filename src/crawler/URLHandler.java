@@ -9,16 +9,21 @@ import org.jsoup.nodes.Document;
 
 public class URLHandler {
 	private String domain;
+	private int responseCode = -1;
 	public URLHandler(String domain) {
 		this.domain = domain;
 	}
-	
+	public int getResponseCode(){
+		return this.responseCode;
+	}
 	public Document getHtml(String subDomain){
 		while(true){
 			try {
 				HttpConnection http = (HttpConnection) Jsoup.connect(this.domain + subDomain);
+				http.ignoreHttpErrors(true);
 				Document result = http.get();
-				System.out.println("response code: " + http.response().statusCode());
+				this.responseCode = http.response().statusCode();
+				System.out.println("response code: " + this.responseCode);
 				if(http.response().statusCode() == 404){
 					return null;
 				}

@@ -14,16 +14,18 @@ public class Crawler {
 		boolean firstRun = true;
 		do{
 			ArrayList<String[]> edges = crawler.findEdges();
-//			if(edges != null){
-//				continue;
-//			}
-			System.out.println("Found " + edges.size() + " friends of " + name);
-			for(String[] edge : edges) handler.addEdge(edge[0], edge[1]);
+			if(edges != null){			
+				System.out.println("Found " + edges.size() + " friends of " + name);
+				for(String[] edge : edges) handler.addEdge(edge[0], edge[1]);
+			}
+			else{
+				System.out.println("Edges are null");
+			}
 			name = crawler.peekNextChild();
 			crawler.setCurrentParent(name);
 			//System.out.println(handler.toString());
 
-			if((!(crawler.getQueueSize() > 0) || crawler.getNodeCount() > 100000) && !firstRun){
+			if((!(crawler.getQueueSize() > 0) /*|| crawler.getNodeCount() > 100000*/) && !firstRun){
 				handler.setEnumeratedList(crawler.getEnumeratedList());
 				break;
 			}

@@ -1,6 +1,7 @@
 package crawler.test;
 
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -39,7 +40,13 @@ public class HTMLParserTest {
 			System.err.println(e.getMessage());
 		}
 	}
-	
+	@Test
+	public void Test404(){
+		URLHandler handler = new URLHandler("http://www.last.fm");
+		Document html = handler.getHtml("/user/bullshiit/friends");
+		assertTrue(handler.getResponseCode() == 404);
+		assertTrue(html == null);
+	}
 //	@Test
 //	public void testGetFriendsFile(){
 //		FileReader sampleHtml;
